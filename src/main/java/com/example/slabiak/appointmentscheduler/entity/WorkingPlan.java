@@ -17,161 +17,160 @@ import java.time.LocalTime;
 @Table(name = "working_plans")
 public class WorkingPlan {
 
-    @Id
-    @Column(name = "id_provider")
-    private int id;
+	@Id
+	@Column(name = "id_provider")
+	private int id;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "id_provider")
-    private Provider provider;
+	@MapsId
+	@OneToOne
+	@JoinColumn(name = "id_provider")
+	private Provider provider;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "monday")
-    private DayPlan monday;
+	@Type(type = "json")
+	@Column(columnDefinition = "json", name = "monday")
+	private DayPlan monday;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "tuesday")
-    private DayPlan tuesday;
+	@Type(type = "json")
+	@Column(columnDefinition = "json", name = "tuesday")
+	private DayPlan tuesday;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "wednesday")
-    private DayPlan wednesday;
+	@Type(type = "json")
+	@Column(columnDefinition = "json", name = "wednesday")
+	private DayPlan wednesday;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "thursday")
-    private DayPlan thursday;
+	@Type(type = "json")
+	@Column(columnDefinition = "json", name = "thursday")
+	private DayPlan thursday;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "friday")
-    private DayPlan friday;
+	@Type(type = "json")
+	@Column(columnDefinition = "json", name = "friday")
+	private DayPlan friday;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "saturday")
-    private DayPlan saturday;
+	@Type(type = "json")
+	@Column(columnDefinition = "json", name = "saturday")
+	private DayPlan saturday;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "sunday")
-    private DayPlan sunday;
+	@Type(type = "json")
+	@Column(columnDefinition = "json", name = "sunday")
+	private DayPlan sunday;
 
+	public WorkingPlan() {
+		// default constructor
+	}
 
-    public WorkingPlan() {
-    }
+	public int getId() {
+		return id;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public User getProvider() {
+		return provider;
+	}
 
-    public User getProvider() {
-        return provider;
-    }
+	public void setProvider(Provider provider) {
+		this.provider = provider;
+	}
 
-    public void setProvider(Provider provider) {
-        this.provider = provider;
-    }
+	public DayPlan getDay(String day) {
+		switch (day) {
+		case "monday":
+			return monday;
 
-    public DayPlan getDay(String day) {
-        switch (day) {
-            case "monday":
-                return monday;
+		case "tuesday":
+			return tuesday;
 
-            case "tuesday":
-                return tuesday;
+		case "wednesday":
+			return wednesday;
 
-            case "wednesday":
-                return wednesday;
+		case "thursday":
+			return thursday;
 
-            case "thursday":
-                return thursday;
+		case "friday":
+			return friday;
 
-            case "friday":
-                return friday;
+		case "saturday":
+			return saturday;
 
-            case "saturday":
-                return saturday;
+		case "sunday":
+			return sunday;
 
-            case "sunday":
-                return sunday;
+		default:
+			return null;
+		}
+	}
 
-            default:
-                return null;
-        }
-    }
+	public DayPlan getMonday() {
+		return monday;
+	}
 
-    public DayPlan getMonday() {
-        return monday;
-    }
+	public void setMonday(DayPlan monday) {
+		this.monday = monday;
+	}
 
-    public void setMonday(DayPlan monday) {
-        this.monday = monday;
-    }
+	public DayPlan getTuesday() {
+		return tuesday;
+	}
 
-    public DayPlan getTuesday() {
-        return tuesday;
-    }
+	public void setTuesday(DayPlan tuesday) {
+		this.tuesday = tuesday;
+	}
 
-    public void setTuesday(DayPlan tuesday) {
-        this.tuesday = tuesday;
-    }
+	public DayPlan getWednesday() {
+		return wednesday;
+	}
 
-    public DayPlan getWednesday() {
-        return wednesday;
-    }
+	public void setWednesday(DayPlan wednesday) {
+		this.wednesday = wednesday;
+	}
 
-    public void setWednesday(DayPlan wednesday) {
-        this.wednesday = wednesday;
-    }
+	public DayPlan getThursday() {
+		return thursday;
+	}
 
-    public DayPlan getThursday() {
-        return thursday;
-    }
+	public void setThursday(DayPlan thursday) {
+		this.thursday = thursday;
+	}
 
-    public void setThursday(DayPlan thursday) {
-        this.thursday = thursday;
-    }
+	public DayPlan getFriday() {
+		return friday;
+	}
 
-    public DayPlan getFriday() {
-        return friday;
-    }
+	public void setFriday(DayPlan friday) {
+		this.friday = friday;
+	}
 
-    public void setFriday(DayPlan friday) {
-        this.friday = friday;
-    }
+	public DayPlan getSaturday() {
+		return saturday;
+	}
 
-    public DayPlan getSaturday() {
-        return saturday;
-    }
+	public void setSaturday(DayPlan saturday) {
+		this.saturday = saturday;
+	}
 
-    public void setSaturday(DayPlan saturday) {
-        this.saturday = saturday;
-    }
+	public DayPlan getSunday() {
+		return sunday;
+	}
 
-    public DayPlan getSunday() {
-        return sunday;
-    }
+	public void setSunday(DayPlan sunday) {
+		this.sunday = sunday;
+	}
 
-    public void setSunday(DayPlan sunday) {
-        this.sunday = sunday;
-    }
-
-
-    public static WorkingPlan generateDefaultWorkingPlan() {
-        WorkingPlan wp = new WorkingPlan();
-        LocalTime defaultStartHour = LocalTime.parse("06:00");
-        LocalTime defaultEndHour = LocalTime.parse("18:00");
-        TimePeroid defaultWorkingPeroid = new TimePeroid(defaultStartHour, defaultEndHour);
-        DayPlan defaultDayPlan = new DayPlan(defaultWorkingPeroid);
-        wp.setMonday(defaultDayPlan);
-        wp.setTuesday(defaultDayPlan);
-        wp.setWednesday(defaultDayPlan);
-        wp.setThursday(defaultDayPlan);
-        wp.setFriday(defaultDayPlan);
-        wp.setSaturday(defaultDayPlan);
-        wp.setSunday(defaultDayPlan);
-        return wp;
-    }
+	public static WorkingPlan generateDefaultWorkingPlan() {
+		WorkingPlan wp = new WorkingPlan();
+		LocalTime defaultStartHour = LocalTime.parse("06:00");
+		LocalTime defaultEndHour = LocalTime.parse("18:00");
+		TimePeroid defaultWorkingPeroid = new TimePeroid(defaultStartHour, defaultEndHour);
+		DayPlan defaultDayPlan = new DayPlan(defaultWorkingPeroid);
+		wp.setMonday(defaultDayPlan);
+		wp.setTuesday(defaultDayPlan);
+		wp.setWednesday(defaultDayPlan);
+		wp.setThursday(defaultDayPlan);
+		wp.setFriday(defaultDayPlan);
+		wp.setSaturday(defaultDayPlan);
+		wp.setSunday(defaultDayPlan);
+		return wp;
+	}
 }
