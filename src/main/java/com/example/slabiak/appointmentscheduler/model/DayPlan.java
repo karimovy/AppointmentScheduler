@@ -6,75 +6,74 @@ import java.util.List;
 
 public class DayPlan {
 
-    private TimePeroid workingHours;
-    private List<TimePeroid> breaks;
+	private TimePeroid workingHours;
+	private List<TimePeroid> breaks;
 
-    public DayPlan() {
-        breaks = new ArrayList();
-    }
+	public DayPlan() {
+		breaks = new ArrayList<>();
+	}
 
-    public DayPlan(TimePeroid workingHours) {
-        this.workingHours = workingHours;
-        this.breaks = new ArrayList();
-    }
+	public DayPlan(TimePeroid workingHours) {
+		this.workingHours = workingHours;
+		this.breaks = new ArrayList<>();
+	}
 
-    public List<TimePeroid> getTimePeroidsWithBreaksExcluded() {
-        ArrayList<TimePeroid> timePeroidsWithBreaksExcluded = new ArrayList<>();
-        timePeroidsWithBreaksExcluded.add(getWorkingHours());
-        List<TimePeroid> breaks = getBreaks();
+	public List<TimePeroid> getTimePeroidsWithBreaksExcluded() {
+		ArrayList<TimePeroid> timePeroidsWithBreaksExcluded = new ArrayList<>();
+		timePeroidsWithBreaksExcluded.add(getWorkingHours());
+		List<TimePeroid> breakList = getBreaks();
 
-        if (!breaks.isEmpty()) {
-            ArrayList<TimePeroid> toAdd = new ArrayList();
-            for (TimePeroid break1 : breaks) {
-                if (break1.getStart().isBefore(workingHours.getStart())) {
-                    break1.setStart(workingHours.getStart());
-                }
-                if (break1.getEnd().isAfter(workingHours.getEnd())) {
-                    break1.setEnd(workingHours.getEnd());
-                }
-                for (TimePeroid peroid : timePeroidsWithBreaksExcluded) {
-                    if (break1.getStart().equals(peroid.getStart()) && break1.getEnd().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
-                        peroid.setStart(break1.getEnd());
-                    }
-                    if (break1.getStart().isAfter(peroid.getStart()) && break1.getStart().isBefore(peroid.getEnd()) && break1.getEnd().equals(peroid.getEnd())) {
-                        peroid.setEnd(break1.getStart());
-                    }
-                    if (break1.getStart().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
-                        toAdd.add(new TimePeroid(peroid.getStart(), break1.getStart()));
-                        peroid.setStart(break1.getEnd());
-                    }
-                }
-            }
-            timePeroidsWithBreaksExcluded.addAll(toAdd);
-            Collections.sort(timePeroidsWithBreaksExcluded);
-        }
+		if (!breakList.isEmpty()) {
+			ArrayList<TimePeroid> toAdd = new ArrayList<>();
+			for (TimePeroid break1 : breakList) {
+				if (break1.getStart().isBefore(workingHours.getStart())) {
+					break1.setStart(workingHours.getStart());
+				}
+				if (break1.getEnd().isAfter(workingHours.getEnd())) {
+					break1.setEnd(workingHours.getEnd());
+				}
+				for (TimePeroid peroid : timePeroidsWithBreaksExcluded) {
+					if (break1.getStart().equals(peroid.getStart()) && break1.getEnd().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
+						peroid.setStart(break1.getEnd());
+					}
+					if (break1.getStart().isAfter(peroid.getStart()) && break1.getStart().isBefore(peroid.getEnd()) && break1.getEnd().equals(peroid.getEnd())) {
+						peroid.setEnd(break1.getStart());
+					}
+					if (break1.getStart().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
+						toAdd.add(new TimePeroid(peroid.getStart(), break1.getStart()));
+						peroid.setStart(break1.getEnd());
+					}
+				}
+			}
+			timePeroidsWithBreaksExcluded.addAll(toAdd);
+			Collections.sort(timePeroidsWithBreaksExcluded);
+		}
 
+		return timePeroidsWithBreaksExcluded;
+	}
 
-        return timePeroidsWithBreaksExcluded;
-    }
+	public TimePeroid getWorkingHours() {
+		return workingHours;
+	}
 
-    public TimePeroid getWorkingHours() {
-        return workingHours;
-    }
+	public void setWorkingHours(TimePeroid workingHours) {
+		this.workingHours = workingHours;
+	}
 
-    public void setWorkingHours(TimePeroid workingHours) {
-        this.workingHours = workingHours;
-    }
+	public List<TimePeroid> getBreaks() {
+		return breaks;
+	}
 
-    public List<TimePeroid> getBreaks() {
-        return breaks;
-    }
+	public void setBreaks(List<TimePeroid> breaks) {
+		this.breaks = breaks;
+	}
 
-    public void setBreaks(List<TimePeroid> breaks) {
-        this.breaks = breaks;
-    }
+	public void removeBreak(TimePeroid breakToRemove) {
+		breaks.remove(breakToRemove);
+	}
 
-    public void removeBreak(TimePeroid breakToRemove) {
-        breaks.remove(breakToRemove);
-    }
-
-    public void addBreak(TimePeroid breakToAdd) {
-        breaks.add(breakToAdd);
-    }
+	public void addBreak(TimePeroid breakToAdd) {
+		breaks.add(breakToAdd);
+	}
 
 }

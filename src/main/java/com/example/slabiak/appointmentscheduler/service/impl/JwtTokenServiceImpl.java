@@ -20,77 +20,79 @@ import java.util.Date;
 @Component
 public class JwtTokenServiceImpl implements JwtTokenService {
 
-    private String jwtSecret;
+	private String jwtSecret;
+	private static final String APPOINTMENT_ID = "appointmentId";
+	private static final String CUSTOMER_ID = "customerId";
 
-    public JwtTokenServiceImpl(@Value(value = "${app.jwtSecret}") String jwtSecret) {
-        this.jwtSecret = jwtSecret;
-    }
+	public JwtTokenServiceImpl(@Value(value = "${app.jwtSecret}") String jwtSecret) {
+		this.jwtSecret = jwtSecret;
+	}
 
-    @Override
-    public String generateAppointmentRejectionToken(Appointment appointment) {
-        Date expiryDate = convertLocalDateTimeToDate(appointment.getEnd().plusDays(1));
-        return Jwts.builder()
-                .claim("appointmentId", appointment.getId())
-                .claim("customerId", appointment.getCustomer().getId())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
+	@Override
+	public String generateAppointmentRejectionToken(Appointment appointment) {
+		Date expiryDate = convertLocalDateTimeToDate(appointment.getEnd().plusDays(1));
+		return Jwts.builder()
+				.claim(APPOINTMENT_ID, appointment.getId())
+				.claim(CUSTOMER_ID, appointment.getCustomer().getId())
+				.setExpiration(expiryDate)
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
+	}
 
-    @Override
-    public String generateAcceptRejectionToken(Appointment appointment) {
-        return Jwts.builder()
-                .claim("appointmentId", appointment.getId())
-                .claim("providerId", appointment.getProvider().getId())
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
+	@Override
+	public String generateAcceptRejectionToken(Appointment appointment) {
+		return Jwts.builder()
+				.claim(APPOINTMENT_ID, appointment.getId())
+				.claim("providerId", appointment.getProvider().getId())
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
+	}
 
 
-    @Override
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return true;
-        } catch (JwtException e) {
-            log.error("Error while token {} validation, error is {}", token, e.getMessage());
-        }
-        return false;
+	@Override
+	public boolean validateToken(String token) {
+		try {
+			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+			return true;
+		} catch (JwtException e) {
+			log.error("Error while token {} validation, error is {}", token, e.getMessage());
+		}
+		return false;
 
-    }
+	}
 
-    @Override
-    public int getAppointmentIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return (int) claims.get("appointmentId");
-    }
+	@Override
+	public int getAppointmentIdFromToken(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(jwtSecret)
+				.parseClaimsJws(token)
+				.getBody();
+		return (int) claims.get(APPOINTMENT_ID);
+	}
 
-    @Override
-    public int getCustomerIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return (int) claims.get("customerId");
-    }
+	@Override
+	public int getCustomerIdFromToken(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(jwtSecret)
+				.parseClaimsJws(token)
+				.getBody();
+		return (int) claims.get(CUSTOMER_ID);
+	}
 
-    @Override
-    public int getProviderIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return (int) claims.get("providerId");
-    }
+	@Override
+	public int getProviderIdFromToken(String token) {
+		Claims claims = Jwts.parser()
+				.setSigningKey(jwtSecret)
+				.parseClaimsJws(token)
+				.getBody();
+		return (int) claims.get("providerId");
+	}
 
-    @Override
-    public Date convertLocalDateTimeToDate(LocalDateTime localDateTime) {
-        ZoneId zone = ZoneId.of("Europe/Warsaw");
-        ZoneOffset zoneOffSet = zone.getRules().getOffset(localDateTime);
-        Instant instant = localDateTime.toInstant(zoneOffSet);
-        return Date.from(instant);
-    }
+	@Override
+	public Date convertLocalDateTimeToDate(LocalDateTime localDateTime) {
+		ZoneId zone = ZoneId.of("Europe/Warsaw");
+		ZoneOffset zoneOffSet = zone.getRules().getOffset(localDateTime);
+		Instant instant = localDateTime.toInstant(zoneOffSet);
+		return Date.from(instant);
+	}
 }

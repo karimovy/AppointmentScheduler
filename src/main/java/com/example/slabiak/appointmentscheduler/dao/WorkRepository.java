@@ -8,12 +8,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface WorkRepository extends JpaRepository<Work, Integer> {
-    @Query("select w from Work w inner join w.providers p where p.id in :providerId")
-    List<Work> findByProviderId(@Param("providerId") int providerId);
+	
+	@Query("select w from Work w inner join w.providers p where p.id in :providerId")
+	public List<Work> findByProviderId(@Param("providerId") int providerId);
 
-    @Query("select w from Work w where w.targetCustomer = :target ")
-    List<Work> findByTargetCustomer(@Param("target") String targetCustomer);
+	@Query("select w from Work w where w.targetCustomer = :target ")
+	public List<Work> findByTargetCustomer(@Param("target") String targetCustomer);
 
-    @Query("select w from Work w inner join w.providers p where p.id in :providerId and w.targetCustomer = :target ")
-    List<Work> findByTargetCustomerAndProviderId(@Param("target") String targetCustomer, @Param("providerId") int providerId);
+	@Query("select w from Work w inner join w.providers p where p.id in :providerId and w.targetCustomer = :target ")
+	public List<Work> findByTargetCustomerAndProviderId(@Param("target") String targetCustomer, @Param("providerId") int providerId);
 }

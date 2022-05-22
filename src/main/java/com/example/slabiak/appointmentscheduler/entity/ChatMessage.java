@@ -1,12 +1,24 @@
 package com.example.slabiak.appointmentscheduler.entity;
 
-import com.example.slabiak.appointmentscheduler.entity.user.User;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.example.slabiak.appointmentscheduler.entity.user.User;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 @Entity
-@Table(name = "messages")
+@Table(name = "MESSAGES")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class ChatMessage extends BaseEntity implements Comparable<ChatMessage> {
 
 	@Column(name = "created_at")
@@ -22,42 +34,6 @@ public class ChatMessage extends BaseEntity implements Comparable<ChatMessage> {
 	@ManyToOne
 	@JoinColumn(name = "id_appointment")
 	private Appointment appointment;
-
-	public ChatMessage() {
-
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public User getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
-	public Appointment getAppointment() {
-		return appointment;
-	}
-
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
-	}
 
 	@Override
 	public int compareTo(ChatMessage o) {

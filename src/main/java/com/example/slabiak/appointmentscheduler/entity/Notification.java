@@ -2,11 +2,20 @@ package com.example.slabiak.appointmentscheduler.entity;
 
 import com.example.slabiak.appointmentscheduler.entity.user.User;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "notifications")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Notification extends BaseEntity {
 
 	@Column(name = "title")
@@ -27,56 +36,4 @@ public class Notification extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "id_user")
 	private User user;
-
-	public Notification() {
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public boolean isRead() {
-		return isRead;
-	}
-
-	public void setRead(boolean isRead) {
-		this.isRead = isRead;
-	}
-
 }

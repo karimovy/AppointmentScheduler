@@ -11,18 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class VersionInterceptor extends HandlerInterceptorAdapter {
 
-    private BuildProperties buildProperties;
+	private BuildProperties buildProperties;
 
-    public VersionInterceptor(BuildProperties buildProperties) {
-        this.buildProperties = buildProperties;
-    }
+	public VersionInterceptor(BuildProperties buildProperties) {
+		this.buildProperties = buildProperties;
+	}
 
-    @Override
-    public void postHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler,
-                           final ModelAndView modelAndView) throws Exception {
+	@Override
+	public void postHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final ModelAndView modelAndView) throws Exception {
 
-        if (modelAndView != null) {
-            modelAndView.getModelMap().addAttribute("currentVersion", buildProperties.getVersion());
-        }
-    }
+		if (modelAndView != null) {
+			modelAndView.getModelMap().addAttribute("currentVersion", buildProperties.getVersion());
+		}
+	}
 }

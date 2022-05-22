@@ -15,55 +15,56 @@ import java.util.List;
 @RequestMapping("/exchange")
 public class ExchangeController {
 
-    private final ExchangeService exchangeService;
-    private final AppointmentService appointmentService;
+	private final ExchangeService exchangeService;
+	private final AppointmentService appointmentService;
+	private static final String REDIRECT_APPOINTMENTS_ALL = "redirect:/appointments/all";
 
-    public ExchangeController(ExchangeService exchangeService, AppointmentService appointmentService) {
-        this.exchangeService = exchangeService;
-        this.appointmentService = appointmentService;
-    }
+	public ExchangeController(ExchangeService exchangeService, AppointmentService appointmentService) {
+		this.exchangeService = exchangeService;
+		this.appointmentService = appointmentService;
+	}
 
-    @GetMapping("/{oldAppointmentId}")
-    public String showEligibleAppointmentsToExchange(@PathVariable("oldAppointmentId") int oldAppointmentId, Model model) {
-        List<Appointment> eligibleAppointments = exchangeService.getEligibleAppointmentsForExchange(oldAppointmentId);
-        model.addAttribute("appointmentId", oldAppointmentId);
-        model.addAttribute("numberOfEligibleAppointments", eligibleAppointments.size());
-        model.addAttribute("eligibleAppointments", eligibleAppointments);
-        return "exchange/listProposals";
-    }
+	@GetMapping("/{oldAppointmentId}")
+	public String showEligibleAppointmentsToExchange(@PathVariable("oldAppointmentId") int oldAppointmentId, Model model) {
+		List<Appointment> eligibleAppointments = exchangeService.getEligibleAppointmentsForExchange(oldAppointmentId);
+		model.addAttribute("appointmentId", oldAppointmentId);
+		model.addAttribute("numberOfEligibleAppointments", eligibleAppointments.size());
+		model.addAttribute("eligibleAppointments", eligibleAppointments);
+		return "exchange/listProposals";
+	}
 
-    @GetMapping("/{oldAppointmentId}/{newAppointmentId}")
-    public String showExchangeSummaryScreen(@PathVariable("oldAppointmentId") int oldAppointmentId, @PathVariable("newAppointmentId") int newAppointmentId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
-        if (exchangeService.checkIfExchangeIsPossible(oldAppointmentId, newAppointmentId, currentUser.getId())) {
-            model.addAttribute("oldAppointment", appointmentService.getAppointmentByIdWithAuthorization(oldAppointmentId));
-            model.addAttribute("newAppointment", appointmentService.getAppointmentById(newAppointmentId));
-        } else {
-            return "redirect:/appointments/all";
-        }
+	@GetMapping("/{oldAppointmentId}/{newAppointmentId}")
+	public String showExchangeSummaryScreen(@PathVariable("oldAppointmentId") int oldAppointmentId, @PathVariable("newAppointmentId") int newAppointmentId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
+		if (exchangeService.checkIfExchangeIsPossible(oldAppointmentId, newAppointmentId, currentUser.getId())) {
+			model.addAttribute("oldAppointment", appointmentService.getAppointmentByIdWithAuthorization(oldAppointmentId));
+			model.addAttribute("newAppointment", appointmentService.getAppointmentById(newAppointmentId));
+		} else {
+			return REDIRECT_APPOINTMENTS_ALL;
+		}
 
-        return "exchange/exchangeSummary";
-    }
+		return "exchange/exchangeSummary";
+	}
 
-    @PostMapping()
-    public String processExchangeRequest(@RequestParam("oldAppointmentId") int oldAppointmentId, @RequestParam("newAppointmentId") int newAppointmentId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
-        boolean result = exchangeService.requestExchange(oldAppointmentId, newAppointmentId, currentUser.getId());
-        if (result) {
-            model.addAttribute("message", "Exchange request sucsessfully sent!");
-        } else {
-            model.addAttribute("message", "Error! Exchange not sent!");
-        }
-        return "exchange/requestConfirmation";
-    }
+	@PostMapping()
+	public String processExchangeRequest(@RequestParam("oldAppointmentId") int oldAppointmentId, @RequestParam("newAppointmentId") int newAppointmentId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
+		boolean result = exchangeService.requestExchange(oldAppointmentId, newAppointmentId, currentUser.getId());
+		if (result) {
+			model.addAttribute("message", "Exchange request sucsessfully sent!");
+		} else {
+			model.addAttribute("message", "Error! Exchange not sent!");
+		}
+		return "exchange/requestConfirmation";
+	}
 
-    @PostMapping("/accept")
-    public String processExchangeAcceptation(@RequestParam("exchangeId") int exchangeId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
-        exchangeService.acceptExchange(exchangeId, currentUser.getId());
-        return "redirect:/appointments/all";
-    }
+	@PostMapping("/accept")
+	public String processExchangeAcceptation(@RequestParam("exchangeId") int exchangeId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
+		exchangeService.acceptExchange(exchangeId, currentUser.getId());
+		return REDIRECT_APPOINTMENTS_ALL;
+	}
 
-    @PostMapping("/reject")
-    public String processExchangeRejection(@RequestParam("exchangeId") int exchangeId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
-        exchangeService.rejectExchange(exchangeId, currentUser.getId());
-        return "redirect:/appointments/all";
-    }
+	@PostMapping("/reject")
+	public String processExchangeRejection(@RequestParam("exchangeId") int exchangeId, Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
+		exchangeService.rejectExchange(exchangeId, currentUser.getId());
+		return REDIRECT_APPOINTMENTS_ALL;
+	}
 }
